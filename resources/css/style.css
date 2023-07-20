@@ -1,22 +1,33 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+.column {
+    float: left;
+    width: 25%;
+    padding: 0px;
+}
+
+/* Centers cards to the middle of the screen */
+.row {
+    margin: 10%
+    
+}
+
+
 .card {
     border-radius: 20px;
-    
     border-color: black;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.3;
     padding: 0.4px 0.4px;
     display: grid;
-    flex-direction: column;
-    max-width: 578px;
+    max-width: 240px;
     min-width: 200px;
     
-    
+
 }
-img {
-    border-radius: 20px;
-    max-width: 578px;
-    min-width: 200px;
-}
+/* darkens the shadow when hovered */
 .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);    
 }
@@ -26,18 +37,19 @@ img {
     
 }
 
-
-
-.cardTwo {
-    border-radius: 20px;
-    
-    border-color: black;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3;
-    padding: 0.4px 0.4px;
-    position: fixed;
-    flex-direction: row;
-    display: flex;
-    max-width: 578px;
+#cardImage {
+    border-radius: 8px;
+    width: 230px;
+    max-width: 240px;
     min-width: 200px;
+    transition: 0.3;
+    object-fit: fill;
 }
+
+@media screen and (max-width: 600px) {
+    .column {
+      width: 100%;
+      display: block;
+      margin-bottom: 20px;
+    }
+  }
