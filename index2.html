@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT</title>
+  <style>
+    /* Add some basic styling to the page */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #4d80af;
+      padding: 20px;
+    }
+    
+    h1 {
+      text-align: center;
+    }
+
+    .chat-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-input {
+      width: 100%;
+      border: 1px solid #000;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .chat-output {
+      border: 1px solid #000;
+      border-radius: 5px;
+      padding: 10px;
+      font-size: 14px;
+      background-color: #f9f9f9;
+    }
+
+    #submit-button {
+      margin-top: 10px;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 13px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>ChatGPT</h1>
+  <div class="chat-container">
+    <label for="api-key">Enter your OpenAI API key:</label>
+    <input type="password" id="api-key" class="chat-input" placeholder="API Key">
+    <span class="error-message" id="api-key-error"></span>
+
+    <textarea class="chat-input" id="question" rows="4" placeholder="Type your question here"></textarea>
+    <button id="submit-button" onclick="submitAPIKey()">Submit</button>
+    <div class="chat-output" id="response"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/openai/src/openai.js"></script>
+  <script>
+    async function askQuestion() {
+  const question = document.getElementById('question').value;
+
+  // Ensure the OpenAI instance is initialized with the user's API key
+  if (!openai) {
+    alert('Please enter your OpenAI API key');
+    return;
+  }
+
+  // Call the OpenAI API to generate a response
+  const response = await openai.complete({
+    engine: 'text-davinci-003', // Use the engine that fits your subscription (gpt-3.5-turbo is also an option)
+    prompt: question,
+    maxTokens: 50,
+    n: 1,
+    stop: '\n',
+    temperature: 0.6
+  }).catch((error) => {
+    console.error('Error:', error);
+    alert('An error occurred while fetching the response. Please try again later.');
+  });
+
+  // Display the response received from the API
+  const responseElement = document.getElementById('response');
+  responseElement.innerText = response.data.choices[0].text.trim();
+}
+
+function submitAPIKey() {
+  const apiKeyInput = document.getElementById('api-key');
+  const apiKey = apiKeyInput.value.trim();
+
+  if (apiKey === '') {
+    alert('Please enter your OpenAI API key.');
+    return;
+  }
+
+  try {
+    // Initialize the OpenAI instance with the user's API key
+    openai = new OpenAI(apiKey);
+
+    // Remove the API key input and submit button
+    apiKeyInput.remove();
+    submitButton.remove();
+
+    // Show the chat interface
+    const questionTextArea = document.getElementById('question');
+    questionTextArea.style.display = 'block';
+    const askButton = document.createElement('button');
+    askButton.innerText = 'Ask';
+    askButton.onclick = askQuestion;
+    questionTextArea.after(askButton);
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred while initializing the OpenAI instance. Please check your API key and try again.');
+  }
+}
+  </script>
+</body>
+</html>
